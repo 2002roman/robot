@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<video id="local_video"></video>
+	<video id="remote_video"></video>
+<script type="text/javascript">
+	var socket = io();
+    var local = document.getElementById("local_video");
+    var remote = document.getElementById("remote_video");
+ 
+    // display local video
+    navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(function(stream) {
+      // local.src = window.URL.createObjectURL(stream);
+      socket.emit("stream", stream);
+      console.log(stream)
+    }).catch(function(err){console.log(err);});
+ 
+    // displays remote video
+    socket.on("stream", function(stream){
+      remote.src = window.URL.createObjectURL(stream);
+ 
+    });
+</script>
+</body>
+</html>
